@@ -22,4 +22,6 @@
 
 6. Add `user_id` to the params, when calling `publish`/`unpublish` actions. When `user_id` is the same as in `post` object - `post` can be published. If not - user doesn't access to it. Redirect to `root_path` with error message.
 
+7. Open pull request with finished feature. Assign it to me
+
 
