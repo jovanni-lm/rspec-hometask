@@ -1,5 +1,8 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, only: [:show, :edit, :update,
+                                  :destroy, :publish, :unpublish,
+                                  :post_author?, :user_id]
+  before_action :post_author?, only: [:publish, :unpublish]
 
   # GET /posts
   # GET /posts.json
@@ -61,10 +64,29 @@ class PostsController < ApplicationController
     end
   end
 
+  def publish
+    @post.publish
+    @post.save!
+    redirect_to @post, notice: 'Post was successfully published.'
+  end
+
+  def unpublish
+    @post.unpublish
+    @post.save!
+    redirect_to @post, notice: 'Post was successfully unpublished.'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_post
       @post = Post.find(params[:id])
+    end
+
+    def post_author?
+      unless @post.user_id == params[:user_id].to_i
+        redirect_to root_path,
+                    notice: "You do not have access to #{params[:action]} action"
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
